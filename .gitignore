@@ -1,0 +1,38 @@
+## [ Visual Studio ]
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.userosscache
+*.sln.docstates
+
+## [ .NET Core / .NET 8 ]
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## [ User-specific files ]
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## [ Docker ]
+.dockerignore
+
+# Ignore Docker Compose override files, which may contain environment-specific configurations
+docker-compose.override.yml
+
+## [ IDEs - VS Code / JetBrains ]
+.vscode/
+.idea/
+*.swp
+*.bak
+
+## [ OS generated files ]
+.DS_Store
+Thumbs.db
+
+## [ Environment Variables - Security ]
+*.env
+appsettings.Development.json
