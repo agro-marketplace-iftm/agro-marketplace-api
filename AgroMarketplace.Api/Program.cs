@@ -1,6 +1,17 @@
+using AgroMarketplace.Api.Data;
+using Microsoft.EntityFrameworkCore;
+
+DotNetEnv.Env.Load();
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+string? connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+
 builder.Services.AddControllers();
+
+// Entity Framework Config.
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionString));
 
 // Swagger Config.
 builder.Services.AddEndpointsApiExplorer();
