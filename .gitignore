@@ -35,4 +35,5 @@ Thumbs.db
 
 ## [ Environment Variables - Security ]
 *.env
+.env
 appsettings.Development.json
