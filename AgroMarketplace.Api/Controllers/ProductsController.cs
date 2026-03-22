@@ -7,10 +7,10 @@ namespace AgroMarketplace.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class Products : ControllerBase
+    public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
-        public Products(IProductService productService)
+        public ProductsController(IProductService productService)
         {
             _productService = productService;
         }
@@ -21,7 +21,7 @@ namespace AgroMarketplace.Api.Controllers
             var response = await _productService.CreateProductAsync(request);
             if (!response.Success)
             {
-                return BadRequest(response);
+                return StatusCode(response.StatusCode, response);
             }
 
             return Created("", response);
@@ -33,7 +33,7 @@ namespace AgroMarketplace.Api.Controllers
             var response = await _productService.GetAllProductsAsync();
             if (!response.Success)
             {
-                return BadRequest(response);
+                return StatusCode(response.StatusCode, response);
             }
 
             return Ok(response);
@@ -46,7 +46,7 @@ namespace AgroMarketplace.Api.Controllers
             var response = await _productService.GetProductAsync(id);
             if (!response.Success)
             {
-                return BadRequest(response);
+                return StatusCode(response.StatusCode, response);
             }
 
             return Ok(response);
