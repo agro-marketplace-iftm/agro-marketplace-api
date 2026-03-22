@@ -3,6 +3,7 @@ using AgroMarketplace.Api.Models;
 using AgroMarketplace.Api.Models.DTOS.Request;
 using AgroMarketplace.Api.Models.DTOS.Response;
 using AgroMarketplace.Api.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace AgroMarketplace.Api.Services.Product
 {
@@ -18,7 +19,6 @@ namespace AgroMarketplace.Api.Services.Product
         {
             try
             {
-                // 1. Create an Entity of request
                 ProductEntity product = new ProductEntity
                 {
                     Id = Guid.NewGuid(),
@@ -31,7 +31,6 @@ namespace AgroMarketplace.Api.Services.Product
                     CreatedAt = DateTime.UtcNow
                 };
 
-                // 2. Save on DB
                 _context.Add(product);
                 await _context.SaveChangesAsync();
 
@@ -57,6 +56,40 @@ namespace AgroMarketplace.Api.Services.Product
                 {
                     Success = false,
                     Message = $"Ocorreu um erro ao criar o produto {request.Name}: {ex.Message}",
+                    Data = null
+                };
+            }
+        }
+
+        public async Task<ApiResponse<IEnumerable<ProductResponseDto>>> GetAllProductsAsync()
+        {
+            try
+            {
+                List<ProductEntity> products = await _context.Products.ToListAsync();
+                IEnumerable<ProductResponseDto> productDtos = products.Select(p => new ProductResponseDto
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Description = p.Description,
+                    Price = p.Price,
+                    Category = p.Category,
+                    ImageUrl = p.ImageUrl,
+                    Stock = p.Stock
+                });
+
+                return new ApiResponse<IEnumerable<ProductResponseDto>>
+                {
+                    Success = true,
+                    Message = "Produtos obtidos com sucesso",
+                    Data = productDtos
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<IEnumerable<ProductResponseDto>>
+                {
+                    Success = false,
+                    Message = $"Ocorreu um erro ao obter os produtos: {ex.Message}",
                     Data = null
                 };
             }

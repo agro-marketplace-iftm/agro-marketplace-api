@@ -7,5 +7,6 @@ namespace AgroMarketplace.Api.Services.Product
     public interface IProductService
     {
         Task<ApiResponse<ProductResponseDto>> CreateProductAsync(CreateProductRequestDto request);
+        Task<ApiResponse<IEnumerable<ProductResponseDto>>> GetAllProductsAsync();
     }
 }
