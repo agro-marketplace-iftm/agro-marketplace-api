@@ -1,4 +1,4 @@
-﻿using AgroMarketplace.Api.Models;
+﻿using AgroMarketplace.Api.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace AgroMarketplace.Api.Data
@@ -10,6 +10,6 @@ namespace AgroMarketplace.Api.Data
 
         }
 
-        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductEntity> Products { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using AgroMarketplace.Api.Models;
+﻿using AgroMarketplace.Api.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgroMarketplace.Api.Controllers
@@ -10,9 +10,9 @@ namespace AgroMarketplace.Api.Controllers
         [HttpGet]
         public IActionResult GetProducts()
         {
-            List<Product> products = new List<Product>()
+            List<ProductEntity> products = new List<ProductEntity>()
             {
-                new Product
+                new ProductEntity
                 {
                    Id = Guid.NewGuid(),
                    Name = "Feijão",

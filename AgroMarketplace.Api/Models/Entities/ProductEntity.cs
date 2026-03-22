@@ -1,6 +1,6 @@
-﻿namespace AgroMarketplace.Api.Models
+﻿namespace AgroMarketplace.Api.Models.Entities
 {
-    public class Product
+    public class ProductEntity
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
