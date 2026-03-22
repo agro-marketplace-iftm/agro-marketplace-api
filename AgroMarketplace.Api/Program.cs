@@ -1,7 +1,7 @@
 using AgroMarketplace.Api.Data;
 using Microsoft.EntityFrameworkCore;
 
-DotNetEnv.Env.Load();
+DotNetEnv.Env.Load(Path.Combine(Directory.GetCurrentDirectory(), "..", ".env"));
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
