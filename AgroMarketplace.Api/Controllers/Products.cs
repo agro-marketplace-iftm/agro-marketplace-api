@@ -15,18 +15,28 @@ namespace AgroMarketplace.Api.Controllers
             _productService = productService;
         }
 
-
         [HttpPost]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequestDto request)
         {
             var response = await _productService.CreateProductAsync(request);
-
             if (!response.Success)
             {
                 return BadRequest(response);
             }
 
             return Created("", response);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllProducts()
+        {
+            var response = await _productService.GetAllProductsAsync();
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
         }
     }
 }
