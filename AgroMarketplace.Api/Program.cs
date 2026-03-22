@@ -1,4 +1,5 @@
 using AgroMarketplace.Api.Data;
+using AgroMarketplace.Api.Services.Product;
 using Microsoft.EntityFrameworkCore;
 
 DotNetEnv.Env.Load(Path.Combine(Directory.GetCurrentDirectory(), "..", ".env"));
@@ -16,6 +17,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Swagger Config.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Services Config.
+builder.Services.AddScoped<IProductService, ProductService>();
 
 WebApplication app = builder.Build();
 
