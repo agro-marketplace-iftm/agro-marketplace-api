@@ -34,30 +34,28 @@ namespace AgroMarketplace.Api.Services.Product
                 _context.Add(product);
                 await _context.SaveChangesAsync();
 
-                return new ApiResponse<ProductResponseDto>
+                ProductResponseDto productResponse = new ProductResponseDto
                 {
-                    Success = true,
-                    Message = $"O Produto {product.Name} foi cadastrado com sucesso",
-                    Data = new ProductResponseDto
-                    {
-                        Id = product.Id,
-                        Name = product.Name,
-                        Description = product.Description,
-                        Price = product.Price,
-                        Category = product.Category,
-                        ImageUrl = product.ImageUrl,
-                        Stock = product.Stock,
-                    }
+                    Id = product.Id,
+                    Name = product.Name,
+                    Description = product.Description,
+                    Price = product.Price,
+                    Category = product.Category,
+                    ImageUrl = product.ImageUrl,
+                    Stock = product.Stock,
                 };
+
+                return ApiResponse<ProductResponseDto>.SuccessResponse(
+                    $"O Produto {product.Name} foi cadastrado com sucesso",
+                    productResponse,
+                    201
+                );
             }
             catch (Exception ex)
             {
-                return new ApiResponse<ProductResponseDto>
-                {
-                    Success = false,
-                    Message = $"Ocorreu um erro ao criar o produto {request.Name}: {ex.Message}",
-                    Data = null
-                };
+                return ApiResponse<ProductResponseDto>.FailureResponse(
+                    $"Ocorreu um erro ao criar o produto {request.Name}: {ex.Message}"
+                );
             }
         }
 
@@ -77,21 +75,16 @@ namespace AgroMarketplace.Api.Services.Product
                     Stock = p.Stock
                 });
 
-                return new ApiResponse<IEnumerable<ProductResponseDto>>
-                {
-                    Success = true,
-                    Message = "Produtos obtidos com sucesso",
-                    Data = productDtos
-                };
+                return ApiResponse<IEnumerable<ProductResponseDto>>.SuccessResponse(
+                    "Produtos obtidos com sucesso",
+                    productDtos
+                );
             }
             catch (Exception ex)
             {
-                return new ApiResponse<IEnumerable<ProductResponseDto>>
-                {
-                    Success = false,
-                    Message = $"Ocorreu um erro ao obter os produtos: {ex.Message}",
-                    Data = null
-                };
+                return ApiResponse<IEnumerable<ProductResponseDto>>.FailureResponse(
+                    $"Ocorreu um erro ao obter os produtos: {ex.Message}"
+                );
             }
         }
 
@@ -99,22 +92,27 @@ namespace AgroMarketplace.Api.Services.Product
         {
             try
             {
-                ProductEntity? product = await _context.Products.FindAsync(Guid.Parse(id));
-                if (product == null)
+                // 1. Check if the provided ID is a valid GUID
+                if (!Guid.TryParse(id, out Guid productId))
                 {
-                    return new ApiResponse<ProductResponseDto>
-                    {
-                        Success = false,
-                        Message = "Produto não encontrado",
-                        Data = null
-                    };
+                    return ApiResponse<ProductResponseDto>.FailureResponse(
+                        "O formato do ID fornecido é inválido.",
+                        400
+                    );
                 }
 
-                return new ApiResponse<ProductResponseDto>
+                // 2. Attempt to find the product by its ID
+                ProductEntity? product = await _context.Products.FindAsync(productId);
+
+                // 3. If the product is not found, return a 404 Not Found response
+                if (product == null)
                 {
-                    Success = true,
-                    Message = "Produto obtido com sucesso",
-                    Data = new ProductResponseDto
+                    return ApiResponse<ProductResponseDto>.FailureResponse("Produto não encontrado", 404);
+                }
+
+                return ApiResponse<ProductResponseDto>.SuccessResponse(
+                    "Produto obtido com sucesso",
+                    new ProductResponseDto
                     {
                         Id = product.Id,
                         Name = product.Name,
@@ -124,16 +122,13 @@ namespace AgroMarketplace.Api.Services.Product
                         ImageUrl = product.ImageUrl,
                         Stock = product.Stock
                     }
-                };
+                );
             }
             catch (Exception ex)
             {
-                return new ApiResponse<ProductResponseDto>
-                {
-                    Success = false,
-                    Message = $"Ocorreu um erro ao obter o produto: {ex.Message}",
-                    Data = null
-                };
+                return ApiResponse<ProductResponseDto>.FailureResponse(
+                    $"Ocorreu um erro ao obter o produto: {ex.Message}"
+                );
             }
         }
     }
