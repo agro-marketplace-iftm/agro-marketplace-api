@@ -38,5 +38,18 @@ namespace AgroMarketplace.Api.Controllers
 
             return Ok(response);
         }
-    }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> GetProduct(string id)
+        {
+            var response = await _productService.GetProductAsync(id);
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+    } 
 }

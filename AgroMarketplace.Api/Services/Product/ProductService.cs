@@ -94,5 +94,47 @@ namespace AgroMarketplace.Api.Services.Product
                 };
             }
         }
+
+        public async Task<ApiResponse<ProductResponseDto>> GetProductAsync(string id)
+        {
+            try
+            {
+                ProductEntity? product = await _context.Products.FindAsync(Guid.Parse(id));
+                if (product == null)
+                {
+                    return new ApiResponse<ProductResponseDto>
+                    {
+                        Success = false,
+                        Message = "Produto não encontrado",
+                        Data = null
+                    };
+                }
+
+                return new ApiResponse<ProductResponseDto>
+                {
+                    Success = true,
+                    Message = "Produto obtido com sucesso",
+                    Data = new ProductResponseDto
+                    {
+                        Id = product.Id,
+                        Name = product.Name,
+                        Description = product.Description,
+                        Price = product.Price,
+                        Category = product.Category,
+                        ImageUrl = product.ImageUrl,
+                        Stock = product.Stock
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<ProductResponseDto>
+                {
+                    Success = false,
+                    Message = $"Ocorreu um erro ao obter o produto: {ex.Message}",
+                    Data = null
+                };
+            }
+        }
     }
 }
