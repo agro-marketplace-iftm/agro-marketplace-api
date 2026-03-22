@@ -6,6 +6,6 @@ namespace AgroMarketplace.Api.Services.Product
 {
     public interface IProductService
     {
-        ApiResponse<ProductResponseDto> CreateProductAsync(CreateProductRequestDto request);
+        Task<ApiResponse<ProductResponseDto>> CreateProductAsync(CreateProductRequestDto request);
     }
 }
