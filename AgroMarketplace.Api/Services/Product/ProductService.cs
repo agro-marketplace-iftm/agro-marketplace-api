@@ -28,7 +28,7 @@ namespace AgroMarketplace.Api.Services.Product
                     Category = request.Category,
                     ImageUrl = request.ImageUrl,
                     Stock = request.Stock,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = DateTime.UtcNow
                 };
 
                 // 2. Save on DB

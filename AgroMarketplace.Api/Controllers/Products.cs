@@ -1,4 +1,6 @@
-﻿using AgroMarketplace.Api.Models.Entities;
+﻿using AgroMarketplace.Api.Models.DTOS.Request;
+using AgroMarketplace.Api.Models.Entities;
+using AgroMarketplace.Api.Services.Product;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgroMarketplace.Api.Controllers
@@ -7,25 +9,24 @@ namespace AgroMarketplace.Api.Controllers
     [Route("api/[controller]")]
     public class Products : ControllerBase
     {
-        [HttpGet]
-        public IActionResult GetProducts()
+        private readonly IProductService _productService;
+        public Products(IProductService productService)
         {
-            List<ProductEntity> products = new List<ProductEntity>()
-            {
-                new ProductEntity
-                {
-                   Id = Guid.NewGuid(),
-                   Name = "Feijão",
-                   Category = "Grãos",
-                   Stock = 10,
-                   Price = 100.234m,
-                   CreatedAt = DateTime.Now,
-                   Description = "Feijão Preto direto de Tombos",
-                   ImageUrl = "https://t4.ftcdn.net/jpg/04/53/15/87/360_F_453158702_nbRkltuoNuVGznoNPDJTXDIaT7vDvnAO.jpg"
-                }
-            };
+            _productService = productService;
+        }
 
-            return Ok(products);
+
+        [HttpPost]
+        public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequestDto request)
+        {
+            var response = await _productService.CreateProductAsync(request);
+
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Created("", response);
         }
     }
 }
