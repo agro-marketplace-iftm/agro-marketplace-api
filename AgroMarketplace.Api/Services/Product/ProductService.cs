@@ -201,5 +201,37 @@ namespace AgroMarketplace.Api.Services.Product
                 );
             }
         }
+
+        public async Task<ApiResponse<string>> DeleteProductAsync(string id)
+        {
+            try
+            {
+                if (!Guid.TryParse(id, out Guid productId))
+                {
+                    return ApiResponse<string>.FailureResponse("O formato do ID fornecido é inválido.", 400);
+                }
+
+                ProductEntity? product = await _context.Products.FindAsync(productId);
+                if (product == null)
+                {
+                    return ApiResponse<string>.FailureResponse("Produto não encontrado para exclusão", 404);
+                }
+
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+
+                return ApiResponse<string>.SuccessResponse(
+                    $"O Produto {product.Name} foi deletado com sucesso.",
+                    product.Id.ToString()
+                );
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<string>.FailureResponse(
+                    $"Ocorreu um erro ao deletar o produto: {ex.Message}"
+                );
+            }
+        }
+
     }
 }

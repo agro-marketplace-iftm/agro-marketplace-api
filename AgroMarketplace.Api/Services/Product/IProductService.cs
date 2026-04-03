@@ -10,5 +10,6 @@ namespace AgroMarketplace.Api.Services.Product
         Task<ApiResponse<IEnumerable<ProductResponseDto>>> GetAllProductsAsync();
         Task<ApiResponse<ProductResponseDto>> GetProductAsync(string id);
         Task<ApiResponse<ProductResponseDto>> UpdateProductAsync(string id, UpdateProductRequestDto request);
+        Task<ApiResponse<string>> DeleteProductAsync(string id);
     }
 }
