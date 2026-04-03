@@ -142,5 +142,64 @@ namespace AgroMarketplace.Api.Services.Product
                 );
             }
         }
+
+        public async Task<ApiResponse<ProductResponseDto>> UpdateProductAsync(string id, UpdateProductRequestDto request)
+        {
+            try
+            {
+                if (!Guid.TryParse(id, out Guid productId))
+                {
+                    return ApiResponse<ProductResponseDto>.FailureResponse("O formato do ID fornecido é inválido.", 400);
+                }
+
+                ProductEntity? product = await _context.Products.FindAsync(productId);
+                if (product == null)
+                {
+                    return ApiResponse<ProductResponseDto>.FailureResponse("Produto não encontrado para edição", 404);
+                }
+
+                bool nameConflict = await _context.Products
+                    .AnyAsync(p => p.Id != productId && p.Name.ToLower() == request.Name.ToLower());
+                if (nameConflict)
+                {
+                    return ApiResponse<ProductResponseDto>.FailureResponse(
+                        $"Já existe outro produto cadastrado com o nome {request.Name}",
+                        400
+                    );
+                }
+
+                // Update the product properties
+                product.Name = request.Name;
+                product.Description = request.Description;
+                product.Price = request.Price;
+                product.Category = request.Category;
+                product.ImageUrl = request.ImageUrl;
+                product.Stock = request.Stock;
+
+                await _context.SaveChangesAsync();
+
+                ProductResponseDto productResponseDto = new ProductResponseDto
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Description = product.Description,
+                    Price = product.Price,
+                    Category = product.Category,
+                    ImageUrl = product.ImageUrl,
+                    Stock = product.Stock
+                };
+
+                return ApiResponse<ProductResponseDto>.SuccessResponse(
+                    $"O Produto {product.Name} foi atualizado com sucesso.",
+                    productResponseDto
+                );
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<ProductResponseDto>.FailureResponse(
+                    $"Ocorreu um erro ao atualizar o produto: {ex.Message}"
+                );
+            }
+        }
     }
 }
