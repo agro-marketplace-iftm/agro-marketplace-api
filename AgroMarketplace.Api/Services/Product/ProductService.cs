@@ -19,6 +19,17 @@ namespace AgroMarketplace.Api.Services.Product
         {
             try
             {
+                bool productExists = await _context.Products
+                    .AnyAsync(p => p.Name.ToLower() == request.Name.ToLower());
+
+                if (productExists)
+                {
+                    return ApiResponse<ProductResponseDto>.FailureResponse(
+                        $"Já existe um produto cadastrado com o nome {request.Name}",
+                        400
+                    );
+                }
+                
                 ProductEntity product = new ProductEntity
                 {
                     Id = Guid.NewGuid(),
