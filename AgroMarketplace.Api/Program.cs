@@ -1,4 +1,5 @@
 using AgroMarketplace.Api.Data;
+using AgroMarketplace.Api.Data.Seeders;
 using AgroMarketplace.Api.Services.Product;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +29,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+// Seed the database with initial data
+using (IServiceScope scope = app.Services.CreateScope())
+{
+    AppDbContext context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    DatabaseSeeder.Seed(context);
 }
 
 app.UseHttpsRedirection();
