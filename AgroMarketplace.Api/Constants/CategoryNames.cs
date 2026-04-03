@@ -8,5 +8,15 @@
         public const string Artisanal = "Artisanal"; // Artesanais (Mel, Geleias, Conservas)
         public const string Plants = "Plants";       // Mudas, Cactos, Plantas
         public const string Others = "Others";       // Outros
+
+        public static readonly string[] AllCategories =
+        {
+            Grains, Produce, Dairy, Artisanal, Plants, Others
+        };
+
+        public static bool IsValid(string category)
+        {
+            return AllCategories.Any(c => c.Equals(category, StringComparison.OrdinalIgnoreCase));
+        }
     }
 }
