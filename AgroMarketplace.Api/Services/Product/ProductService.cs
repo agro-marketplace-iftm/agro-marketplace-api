@@ -232,6 +232,5 @@ namespace AgroMarketplace.Api.Services.Product
                 );
             }
         }
-
     }
 }

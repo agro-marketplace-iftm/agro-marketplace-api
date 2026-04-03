@@ -64,5 +64,18 @@ namespace AgroMarketplace.Api.Controllers
 
             return Ok(response);
         }
-    } 
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteProduct(string id)
+        {
+            var response = await _productService.DeleteProductAsync(id);
+            if (!response.Success)
+            {
+                return StatusCode(response.StatusCode, response);
+            }
+
+            return Ok(response);
+        }
+    }
 }
