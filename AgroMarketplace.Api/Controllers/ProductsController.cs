@@ -51,5 +51,18 @@ namespace AgroMarketplace.Api.Controllers
 
             return Ok(response);
         }
+
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> UpdateProduct(string id, [FromBody] UpdateProductRequestDto request)
+        {
+            var response = await _productService.UpdateProductAsync(id, request);
+            if (!response.Success)
+            {
+                return StatusCode(response.StatusCode, response);
+            }
+
+            return Ok(response);
+        }
     } 
 }
