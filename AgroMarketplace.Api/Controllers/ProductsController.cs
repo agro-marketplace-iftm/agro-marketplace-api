@@ -28,9 +28,9 @@ namespace AgroMarketplace.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllProducts()
+        public async Task<IActionResult> GetAllProducts([FromQuery] string? category = null)
         {
-            var response = await _productService.GetAllProductsAsync();
+            var response = await _productService.GetAllProductsAsync(category);
             if (!response.Success)
             {
                 return StatusCode(response.StatusCode, response);

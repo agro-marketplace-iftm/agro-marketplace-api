@@ -1,4 +1,5 @@
-﻿using AgroMarketplace.Api.Data;
+﻿using AgroMarketplace.Api.Constants;
+using AgroMarketplace.Api.Data;
 using AgroMarketplace.Api.Models;
 using AgroMarketplace.Api.Models.DTOS.Request;
 using AgroMarketplace.Api.Models.DTOS.Response;
@@ -70,11 +71,27 @@ namespace AgroMarketplace.Api.Services.Product
             }
         }
 
-        public async Task<ApiResponse<IEnumerable<ProductResponseDto>>> GetAllProductsAsync()
+        public async Task<ApiResponse<IEnumerable<ProductResponseDto>>> GetAllProductsAsync(string? category = null)
         {
             try
             {
-                List<ProductEntity> products = await _context.Products.ToListAsync();
+                IQueryable<ProductEntity> query = _context.Products.AsQueryable();
+
+                if (!string.IsNullOrEmpty(category))
+                {
+                    if (!CategoryNames.IsValid(category))
+                    {
+                        return ApiResponse<IEnumerable<ProductResponseDto>>.FailureResponse(
+                            $"A categoria '{category}' não é válida para busca.", 
+                            400
+                        );
+                    }
+
+                    query = query.Where(p => p.Category.ToLower() == category.ToLower());
+                }
+
+                List<ProductEntity> products = await query.ToListAsync();
+                
                 IEnumerable<ProductResponseDto> productDtos = products.Select(p => new ProductResponseDto
                 {
                     Id = p.Id,

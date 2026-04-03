@@ -7,7 +7,7 @@ namespace AgroMarketplace.Api.Services.Product
     public interface IProductService
     {
         Task<ApiResponse<ProductResponseDto>> CreateProductAsync(CreateProductRequestDto request);
-        Task<ApiResponse<IEnumerable<ProductResponseDto>>> GetAllProductsAsync();
+        Task<ApiResponse<IEnumerable<ProductResponseDto>>> GetAllProductsAsync(string? category = null);
         Task<ApiResponse<ProductResponseDto>> GetProductAsync(string id);
         Task<ApiResponse<ProductResponseDto>> UpdateProductAsync(string id, UpdateProductRequestDto request);
         Task<ApiResponse<string>> DeleteProductAsync(string id);
